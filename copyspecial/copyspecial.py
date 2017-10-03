@@ -10,13 +10,25 @@ import sys
 import re
 import os
 import shutil
-import commands
+import subprocess
 
 """Copy Special exercise
 """
 
 # +++your code here+++
 # Write functions and modify main() to call them
+
+# Given a file directory, this function finds all the special files
+# and places the absolute paths in a list
+def get_file_paths(fileDir):
+  filenameList = os.listdir(fileDir)
+  # print(filenames)
+  specialFilenameList = []
+
+  for file in filenameList:
+    special = re.search("__\w+__", file)
+    if special:
+      specialFilenameList.append(os.path.abspath(special.group()))
 
 
 
@@ -28,7 +40,7 @@ def main():
   # which is the script itself.
   args = sys.argv[1:]
   if not args:
-    print "usage: [--todir dir][--tozip zipfile] dir [dir ...]";
+    print("usage: [--todir dir][--tozip zipfile] dir [dir ...]")
     sys.exit(1)
 
   # todir and tozip are either set from command line
@@ -45,11 +57,13 @@ def main():
     del args[0:2]
 
   if len(args) == 0:
-    print "error: must specify one or more dirs"
+    print("error: must specify one or more dirs")
     sys.exit(1)
 
   # +++your code here+++
   # Call your functions
+  fileDir = args[0]
+  get_file_paths(fileDir)
   
 if __name__ == "__main__":
   main()
