@@ -48,37 +48,64 @@ def extract_names(filename):
   for line in f:
     year = re.search(r"Popularity\sin\s(\d+)", line)
     if year:
-      print(year.group(1))
+      # print(year.group(1))
       break
 
+  # Create a dict for names
+  nameDict = {}
   # Searches for the rank numbers and names (M&F)
   table = re.findall(r"<td>(\d+)</td><td>(\w+)</td><td>(\w+)</td>", f.read())
   for entry in table:
-    print("{}\t{}\t{}".format(entry[0], entry[1], entry[2]))
-  return
-#test test
+    # print("{}\t{}\t{}".format(entry[0], entry[1], entry[2]))
+    # Stores the names in the dict
+    nameDict[entry[1]] = entry[0]
+    nameDict[entry[2]] = entry[0]
+
+  # Time to sort the names in the Dict
+  sortedNames = sorted(nameDict.keys())
+  # This will be the list we return
+  result = [str(year.group(1))]
+  # Time to create the list
+  for key in sortedNames:
+    result.append("{}, {}".format(key, nameDict[key]))
+
+  return result
+
 
 def main():
   # This command-line parsing code is provided.
   # Make a list of command line arguments, omitting the [0] element
   # which is the script itself.
   args = sys.argv[1:]
-  extract_names("baby1990.html")
 
-"""
+  # If the input is incorrect, tell them how it should go
   if not args:
     print('usage: [--summaryfile] file [file ...]')
     sys.exit(1)
 
+  # Otherwise keep going
   # Notice the summary flag and remove it from args if it is present.
   summary = False
   if args[0] == '--summaryfile':
     summary = True
+    f = open("summary.txt", "w")
     del args[0]
-  # +++your code here+++
-"""
 
-# For each filename, get the names, then either print the text output
-# or write it to a summary file
+  nameList = []
+  for file in args[0:]:
+    nameList = extract_names(file)
+    if summary:
+      f.write(str(nameList))
+      f.write("\n\n")
+      print("Success")
+    else:
+      print(nameList)
+      print("\n\n")
+      print("Success")
+
+  # For each filename, get the names, then either print the text output
+  # or write it to a summary file
+
+
 if __name__ == '__main__':
   main()
