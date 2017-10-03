@@ -34,7 +34,7 @@ def read_urls(filename):
       urlList.append(url.group(1))
 
   urlList = sorted(urlList)
-  print(urlList)
+  # print(urlList)
   return urlList
 
 def download_images(img_urls, dest_dir):
@@ -46,7 +46,16 @@ def download_images(img_urls, dest_dir):
   Creates the directory if necessary.
   """
   # +++your code here+++
-  
+  indexFile = open("index.txt", "w")
+  i = 0
+  for url in img_urls:
+    try:
+      urllib.request.urlretrieve(url, dest_dir + "/img" + str(i))
+      indexFile.write("img" + str(i) + ": " + str(url))
+      i = i + 1
+    except ValueError:
+      sys.stderr.write("Problem reading url: " + str(url) + "\n")
+  return
 
 def main():
   args = sys.argv[1:]
@@ -61,11 +70,11 @@ def main():
     del args[0:2]
 
   img_urls = read_urls(args[0])
-"""
+
   if todir:
     download_images(img_urls, todir)
   else:
     print('\n'.join(img_urls))
-"""
+
 if __name__ == '__main__':
   main()
