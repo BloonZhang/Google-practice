@@ -9,7 +9,7 @@
 import os
 import re
 import sys
-import urllib
+import urllib.request
 
 """Logpuzzle exercise
 Given an apache logfile, find the puzzle urls and download the images.
@@ -25,7 +25,15 @@ def read_urls(filename):
   Screens out duplicate urls and returns the urls sorted into
   increasing order."""
   # +++your code here+++
-  
+  f = open(filename, "r")
+  urlList = []
+  url = None
+  for line in f:
+    url = re.search(r"GET (*+)", line)
+    if (url) and (url not in urlList):
+      url.append(url)
+
+  return
 
 def download_images(img_urls, dest_dir):
   """Given the urls already in the correct order, downloads
@@ -42,7 +50,7 @@ def main():
   args = sys.argv[1:]
 
   if not args:
-    print 'usage: [--todir dir] logfile '
+    print('usage: [--todir dir] logfile ')
     sys.exit(1)
 
   todir = ''
@@ -55,7 +63,7 @@ def main():
   if todir:
     download_images(img_urls, todir)
   else:
-    print '\n'.join(img_urls)
+    print('\n'.join(img_urls))
 
 if __name__ == '__main__':
   main()
