@@ -29,11 +29,13 @@ def read_urls(filename):
   urlList = []
   url = None
   for line in f:
-    url = re.search(r"GET (*+)", line)
-    if (url) and (url not in urlList):
-      url.append(url)
+    url = re.search(r"GET (\S+\.\w+)", line)
+    if (url) and (url.group(1) not in urlList):
+      urlList.append(url.group(1))
 
-  return
+  urlList = sorted(urlList)
+  print(urlList)
+  return urlList
 
 def download_images(img_urls, dest_dir):
   """Given the urls already in the correct order, downloads
@@ -59,11 +61,11 @@ def main():
     del args[0:2]
 
   img_urls = read_urls(args[0])
-
+"""
   if todir:
     download_images(img_urls, todir)
   else:
     print('\n'.join(img_urls))
-
+"""
 if __name__ == '__main__':
   main()
